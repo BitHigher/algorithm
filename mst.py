@@ -1,5 +1,5 @@
 import numpy
-import ds
+import structure
 
 def kruskal(graph):
 	''' graph is undirected and represented by a n*n matrix '''
@@ -14,8 +14,9 @@ def kruskal(graph):
 	edges = sorted(edges, key=lambda x:x[1])
 	
 	# construct the mst from minmum edge
-	mst = numpy.zeros((n, n), dtype='int')
+	mst = numpy.zeros((n, n))
 	n_edges = 0
+	ds = structure.disjoint_set()
 	for (e, w) in edges:
 		if ds.find(e[0]) != ds.find(e[1]):
 			mst[e] = w
@@ -26,5 +27,12 @@ def kruskal(graph):
 	return mst
 
 def prime(graph):
-	pass
-	# TODO
+	n = graph.shape[0]
+	mst = numpy.zeros((n, n))
+	selected = []
+	unselected = set([i for i in range(n)])
+	distance = [(numpy.inf, i) for i in range(n)]
+
+	# set the distance of vertex 0 to 0
+	distance[0] = (0, 0)
+	heap = structure.heap(distance, key=lambda x:x[0])
