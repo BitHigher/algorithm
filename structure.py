@@ -23,9 +23,11 @@ class disjoint_set:
 			self.root[rv] = ru
 
 class heap:
-	def __init__(self, array, key=None):
-		self.array = [0] + array
-		self.size = len(array)
+	def __init__(self, items, key=None):
+		self.array = [0]
+		for item in items:
+			self.array.append(item)
+		self.size = len(self.array)-1
 		
 		if key == None: self.key = lambda x:x
 		else: self.key = key

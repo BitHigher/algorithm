@@ -8,7 +8,7 @@ def kruskal(graph):
 	n = graph.shape[0]
 	for i in range(n):
 		for j in range(i+1, n):
-			if graph[i, j] > 0:
+			if graph[i, j] < numpy.inf:
 				edges.append(((i, j), graph[i, j]))
 
 	edges = sorted(edges, key=lambda x:x[1])
@@ -29,10 +29,28 @@ def kruskal(graph):
 def prime(graph):
 	n = graph.shape[0]
 	mst = numpy.zeros((n, n))
-	selected = []
-	unselected = set([i for i in range(n)])
-	distance = [(numpy.inf, i) for i in range(n)]
+	unselected = set([i for i in range(1, n)])
+	distance = [graph[0, i] for i in range(n)]
+	prev = {}
+	for i in unselected:
+		prev[i] = 0
 
-	# set the distance of vertex 0 to 0
-	distance[0] = (0, 0)
-	heap = structure.heap(distance, key=lambda x:x[0])
+	while len(unselected) > 0:
+		# find minmum distance
+		# may be replaced by heap
+		mini = numpy.inf
+		minidx = 0
+		for i in unselected:
+			if distance[i] < mini:
+				mini = distance[i]
+				minidx = i
+		unselected.discard(minidx)
+		mst[minidx, prev[minidx]] = mini
+
+		# update the distance of vertics to minindex
+		for i in range(n):
+			if graph[minidx, i] < distance[i]:
+				distance[i] = graph[minidx, i]
+				prev[i] = minidx
+
+	return mst
