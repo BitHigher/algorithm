@@ -139,7 +139,7 @@ class priority_queue:
 		self.size -= 1
 		self.top_down(1)
 		
-		return value
+		return (key, value)
 
 	def bottom_up(self, index):
 		self.array[0] = self.array[index]
@@ -164,6 +164,12 @@ class priority_queue:
 			self.array[self.size] = n
 
 		self.bottom_up(self.size)
+	
+	def get_value(self, key):
+		if self.table.has_key(key):
+			return self.table[key]
+		else:
+			return None
 
 	def set_value(self, key, value):
 		if not self.table.has_key(key):
